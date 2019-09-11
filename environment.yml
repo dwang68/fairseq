@@ -1,0 +1,11 @@
+name: fairseq
+channels:
+  - pytorch
+dependencies:
+  - python=3.7  # or 2.7
+  - pytorch=1.2
+  - cudatoolkit=10.0
+  - numpy
+  - pip
+  - pip:
+    - torchvision
