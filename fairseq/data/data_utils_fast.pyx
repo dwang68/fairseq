@@ -1,3 +1,4 @@
+# cython: language_level=3
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # This source code is licensed under the MIT license found in the
@@ -15,9 +16,9 @@ ctypedef np.int64_t DTYPE_t
 cdef _is_batch_full(list batch, long num_tokens, long max_tokens, long max_sentences):
     if len(batch) == 0:
         return 0
-    if len(batch) == max_sentences:
+    if max_sentences > 0 and len(batch) == max_sentences:
         return 1
-    if num_tokens > max_tokens:
+    if max_tokens > 0 and num_tokens > max_tokens:
         return 1
     return 0
 
@@ -46,7 +47,7 @@ cpdef list batch_by_size_fast(
         sample_lens.append(num_tokens)
         sample_len = max(sample_len, num_tokens)
 
-        assert sample_len <= max_tokens, (
+        assert max_tokens <= 0 or sample_len <= max_tokens, (
             "sentence at index {} of size {} exceeds max_tokens "
             "limit of {}!".format(idx, sample_len, max_tokens)
         )
